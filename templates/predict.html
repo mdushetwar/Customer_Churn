@@ -43,7 +43,7 @@
         }
 
         .flag {
-            font-size: 128px;
+            font-size: 150px;
         }
 
         .churn-risk-scores {
@@ -53,11 +53,38 @@
         }
 
         .churn-text {
-            font-size: 24px;
+            font-size: 20px;
             font-style: italic;
             text-align: center;
+            font-family: 'Lato', sans-serif;
+            margin-top:15px
+        }
+
+        .back-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .back-button {
+            background: linear-gradient(to right, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(to right, #45a049, #4CAF50);
         }
     </style>
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -81,6 +108,10 @@
                 Customer is not likely to churn
             {% endif %}
         </div>
+        <div class="back-button-container">
+            <form action="/" method="get">
+                <button type="submit" class="back-button">Back</button>
+            </form>
+        </div>
     </div>
 </body>
-</html>

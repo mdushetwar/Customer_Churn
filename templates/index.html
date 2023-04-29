@@ -19,14 +19,15 @@
             background-position: 0% 50%;
           }
         }
-       .container {
+
+        .container {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            height: 200vh; /* Increased height to 300vh */
+            height: 200vh;
             width: 100%;
-            max-width: 800px; /* Limit the maximum width of the container */
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -36,6 +37,7 @@
             text-align: center;
             margin-top: 30px;
         }
+
         form {
             width: 800px;
             padding: 30px;
@@ -54,6 +56,7 @@
             font-size: 16px;
             font-weight: bold;
         }
+
         input[type="text"],
         input[type="number"],
         select {
@@ -62,8 +65,9 @@
             font-size: 14px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            margin-bottom: 5px; /* Add spacing between input fields */
+            margin-bottom: 5px;
         }
+
         button {
             grid-column: span 2;
             width: 100%;
@@ -76,40 +80,12 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
-        .prediction {
-            margin-top: 20px;
-            padding: 10px;
-            background: #fff;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            color: #333;
-        }
-
-        /* Additional styles for the flags */
-        .flag {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            margin-left: 5px;
-        }
-
-        .green-flag {
-            background: green;
-        }
-
-        .red-flag {
-            background: red;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Customer Churn Predictor</h1>
-        <form id="churnForm">
+        <form action="/predict" method="POST">
             <div class="form-group">
                 <label for="account_length">Account Length:</label>
                 <input type="number" id="account_length" name="account_length" required>
@@ -163,70 +139,8 @@
                 <input type="number" id="custServ_calls" name="custServ_calls" required>
             </div>
 
-            <button type="submit" id="predictButton">Predict</button>
+            <button type="submit">Predict</button>
         </form>
-
-        <div id="predictionContainer" style="display: none;">
-            <div class="prediction" id="prediction"></div>
-            <div class="flag" id="flag"></div>
-            <button onclick="resetForm()">Reset</button>
-        </div>
     </div>
-
-    <script>
-        // Get references to the form and prediction container
-        const form = document.getElementById('churnForm');
-        const predictionContainer = document.getElementById('predictionContainer');
-
-        // Handle form submission
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
-
-            // Hide the form
-            form.style.display = 'none';
-
-            // Show the prediction container
-            predictionContainer.style.display = 'block';
-
-            // Perform the prediction and display the result
-            const predictionElement = document.getElementById('prediction');
-            const flagElement = document.getElementById('flag');
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/predict', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    const predictionResult = response.prediction;
-
-                    predictionElement.textContent = 'Churn Prediction: ' + predictionResult;
-
-                    // Set the flag based on the prediction result
-                    if (predictionResult === 'NO') {
-                        flagElement.classList.add('green-flag');
-                    } else {
-                        flagElement.classList.add('red-flag');
-                    }
-                }
-            };
-
-            const formData = new FormData(form);
-            const jsonData = JSON.stringify(Object.fromEntries(formData));
-            xhr.send(jsonData);
-        });
-
-        // Function to reset the form and prediction
-        function resetForm() {
-            form.reset();
-            form.style.display = 'block';
-            predictionContainer.style.display = 'none';
-
-            // Reset the flag color
-            const flagElement = document.getElementById('flag');
-            flagElement.classList.remove('green-flag', 'red-flag');
-        }
-    </script>
 </body>
 </html>

@@ -1,10 +1,232 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <style>
+        body {
+          background: linear-gradient(to right, #ff4e50, #f9d423);
+          background-size: 200% 200%;
+          animation: flowing-gradient 10s ease infinite;
+        }
+
+        @keyframes flowing-gradient {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+       .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 200vh; /* Increased height to 300vh */
+            width: 100%;
+            max-width: 800px; /* Limit the maximum width of the container */
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 36px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        form {
+            width: 800px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 5px; /* Add spacing between input fields */
+        }
+        button {
+            grid-column: span 2;
+            width: 100%;
+            padding: 10px;
+            background: #66cccc;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .prediction {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* Additional styles for the flags */
+        .flag {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+
+        .green-flag {
+            background: green;
+        }
+
+        .red-flag {
+            background: red;
+        }
+    </style>
 </head>
 <body>
-$END$
+    <div class="container">
+        <h1>Customer Churn Predictor</h1>
+        <form id="churnForm">
+            <div class="form-group">
+                <label for="account_length">Account Length:</label>
+                <input type="number" id="account_length" name="account_length" required>
+            </div>
+
+            <div class="form-group">
+                <label for="international_plan">International Plan:</label>
+                <select id="international_plan" name="international_plan" required>
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="vmail_message">Voicemail Messages:</label>
+                <input type="number" id="vmail_message" name="vmail_message" required>
+            </div>
+
+            <div class="form-group">
+                <label for="day_calls">Day Calls:</label>
+                <input type="number" id="day_calls" name="day_calls" required>
+            </div>
+
+            <div class="form-group">
+                <label for="day_charge">Day Charge:</label>
+                <input type="number" id="day_charge" name="day_charge" required>
+            </div>
+
+             <div class="form-group">
+                <label for="eve_charge">Evening Charge:</label>
+                <input type="number" id="eve_charge" name="eve_charge" required>
+            </div>
+
+            <div class="form-group">
+                <label for="night_charge">Night Charge:</label>
+                <input type="number" id="night_charge" name="night_charge" required>
+            </div>
+
+            <div class="form-group">
+                <label for="international_calls">International Calls:</label>
+                <input type="number" id="international_calls" name="international_calls" required>
+            </div>
+
+            <div class="form-group">
+                <label for="international_charge">International Charge:</label>
+                <input type="number" id="international_charge" name="international_charge" required>
+            </div>
+
+            <div class="form-group">
+                <label for="custServ_calls">Customer Service Calls:</label>
+                <input type="number" id="custServ_calls" name="custServ_calls" required>
+            </div>
+
+            <button type="submit" id="predictButton">Predict</button>
+        </form>
+
+        <div id="predictionContainer" style="display: none;">
+            <div class="prediction" id="prediction"></div>
+            <div class="flag" id="flag"></div>
+            <button onclick="resetForm()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // Get references to the form and prediction container
+        const form = document.getElementById('churnForm');
+        const predictionContainer = document.getElementById('predictionContainer');
+
+        // Handle form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Hide the form
+            form.style.display = 'none';
+
+            // Show the prediction container
+            predictionContainer.style.display = 'block';
+
+            // Perform the prediction and display the result
+            const predictionElement = document.getElementById('prediction');
+            const flagElement = document.getElementById('flag');
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/predict', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    const predictionResult = response.prediction;
+
+                    predictionElement.textContent = 'Churn Prediction: ' + predictionResult;
+
+                    // Set the flag based on the prediction result
+                    if (predictionResult === 'NO') {
+                        flagElement.classList.add('green-flag');
+                    } else {
+                        flagElement.classList.add('red-flag');
+                    }
+                }
+            };
+
+            const formData = new FormData(form);
+            const jsonData = JSON.stringify(Object.fromEntries(formData));
+            xhr.send(jsonData);
+        });
+
+        // Function to reset the form and prediction
+        function resetForm() {
+            form.reset();
+            form.style.display = 'block';
+            predictionContainer.style.display = 'none';
+
+            // Reset the flag color
+            const flagElement = document.getElementById('flag');
+            flagElement.classList.remove('green-flag', 'red-flag');
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,26 @@
+entry:1 ------->>>This customer churned
+-----------
+account length --------120
+International plan---------no
+voicemail message---------0
+day calls -------------131
+day charge-----------36.6
+evening charge-----------17.8
+night charge------------7.52
+international calls--------5
+international charge------------1.43
+customer service calls---------1
+
+
+entry:2 ------->>>This customer did not churn
+-------------
+account length --------112
+International plan---------no
+voicemail message---------31
+day calls -------------92
+day charge-----------24.29
+evening charge-----------19.87
+night charge------------14.81
+international calls--------6
+international charge------------2.81
+customer service calls---------0

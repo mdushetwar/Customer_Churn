@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import xgboost
 import pickle
+import sklearn
 from flask import Flask, render_template, request
 
 app = Flask(__name__)

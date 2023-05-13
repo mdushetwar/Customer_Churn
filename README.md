@@ -24,7 +24,7 @@ The project requires the following libraries:
 ## Usage
 To run the project, follow these steps:
 
-- Clone the repository: git clone https://github.com/your-username/customer-churn-prediction.git
+- Clone the repository: git clone https://github.com/mdushetwar/Customer_Churn.git
 - Install the required libraries: pip install -r requirements.txt
 - Run the web application: python app.py
 - Open a web browser and go to http://localhost:5000

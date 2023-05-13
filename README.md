@@ -12,14 +12,14 @@ The dataset used for this project is the Telecom Customer Churn dataset, which c
 ## Requirements
 The project requires the following libraries:
 
-pandas
-numpy
-matplotlib
-seaborn
-MGD_Outliers
-scikit-learn
-xgboost
-flask
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- MGD_Outliers
+- scikit-learn
+- xgboost
+- flask
 
 ## Usage
 To run the project, follow these steps:
